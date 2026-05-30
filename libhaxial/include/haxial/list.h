@@ -31,6 +31,8 @@ extern "C" {
 
 /**
  * Intrusive list node - embed this in your data structure
+ * 
+ * This struct is NOT opaque - you can directly access next/prev pointers.
  */
 typedef struct TListNode {
     struct TListNode *next;
@@ -38,10 +40,10 @@ typedef struct TListNode {
 } TListNode;
 
 /**
- * List head structure (opaque)
+ * List head structure (opaque - use provided functions)
  * 
  * For stack allocation, use HX_LIST_SIZE with aligned storage:
- *   alignas(TList) char buf[HX_LIST_SIZE];
+ *   alignas(max_align_t) char buf[HX_LIST_SIZE];
  *   TList *list = (TList *)buf;
  */
 typedef struct TList TList;
@@ -80,6 +82,14 @@ void hx_list_append(TList *list, TListNode *node);
  * Remove node from list
  */
 void hx_list_remove(TList *list, TListNode *node);
+
+/**
+ * Pop head node from list (remove and return first node)
+ * 
+ * @param list List to pop from
+ * @return First node, or NULL if list is empty
+ */
+TListNode* hx_list_pop_head(TList *list);
 
 /**
  * Get first node (or NULL if empty)

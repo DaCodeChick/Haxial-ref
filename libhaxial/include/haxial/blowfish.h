@@ -17,20 +17,27 @@ extern "C" {
 #endif
 
 /**
- * Blowfish context structure
+ * Blowfish context structure (opaque - use provided functions)
  * 
- * Size: 4168 bytes total
- * Layout from KDXServer analysis:
- *   p_array[18]:  +0x0000 (72 bytes)  - P-array for Feistel network
- *   s_boxes[4][256]: +0x0048 (4096 bytes) - Four S-boxes for F function
+ * For stack allocation:
+ *   TBlowfishContext ctx;
+ *   hx_blowfish_init(&ctx, key, key_len);
  */
-typedef struct {
-    uint32_t p_array[18];        /**< P-array (18 entries) */
-    uint32_t s_box_0[256];       /**< S-box 0 */
-    uint32_t s_box_1[256];       /**< S-box 1 */
-    uint32_t s_box_2[256];       /**< S-box 2 */
-    uint32_t s_box_3[256];       /**< S-box 3 */
-} TBlowfishContext;
+typedef struct TBlowfishContext TBlowfishContext;
+
+/**
+ * Allocate Blowfish context on heap
+ * 
+ * @return Pointer to allocated context, or NULL on error
+ */
+TBlowfishContext* hx_blowfish_alloc(void);
+
+/**
+ * Free Blowfish context allocated with hx_blowfish_alloc
+ * 
+ * @param ctx Context to free
+ */
+void hx_blowfish_free(TBlowfishContext *ctx);
 
 /**
  * Initialize Blowfish context with key

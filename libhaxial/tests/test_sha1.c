@@ -6,6 +6,7 @@
 #include <haxial.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /* Test vector from RFC 3174 */
 static void test_sha1_basic(void) {
@@ -55,7 +56,7 @@ static void test_sha1_incremental(void) {
     const char *part1 = "The quick brown fox ";
     const char *part2 = "jumps over the lazy dog";
     uint8_t digest1[20], digest2[20];
-    TSha1Context ctx;
+    TSha1Context *ctx = hx_sha1_alloc();
     
     /* All at once */
     char buffer[100];
@@ -63,10 +64,12 @@ static void test_sha1_incremental(void) {
     hx_sha1_hash((const uint8_t *)buffer, strlen(buffer), digest1);
     
     /* Incrementally */
-    hx_sha1_init(&ctx);
-    hx_sha1_update(&ctx, (const uint8_t *)part1, strlen(part1));
-    hx_sha1_update(&ctx, (const uint8_t *)part2, strlen(part2));
-    hx_sha1_finalize(&ctx, digest2);
+    hx_sha1_init(ctx);
+    hx_sha1_update(ctx, (const uint8_t *)part1, strlen(part1));
+    hx_sha1_update(ctx, (const uint8_t *)part2, strlen(part2));
+    hx_sha1_finalize(ctx, digest2);
+    
+    hx_sha1_free(ctx);
     
     if (memcmp(digest1, digest2, 20) == 0) {
         printf("SHA-1 incremental test: PASS\n");

@@ -7,6 +7,26 @@
 
 #include "haxial/blowfish.h"
 #include <string.h>
+#include <stdlib.h>
+
+/**
+ * Internal structure definition
+ */
+struct TBlowfishContext {
+    uint32_t p_array[18];        /**< P-array (18 entries) */
+    uint32_t s_box_0[256];       /**< S-box 0 */
+    uint32_t s_box_1[256];       /**< S-box 1 */
+    uint32_t s_box_2[256];       /**< S-box 2 */
+    uint32_t s_box_3[256];       /**< S-box 3 */
+};
+
+TBlowfishContext* hx_blowfish_alloc(void) {
+    return malloc(sizeof(TBlowfishContext));
+}
+
+void hx_blowfish_free(TBlowfishContext *ctx) {
+    free(ctx);
+}
 
 /* Initial P-array values (hexadecimal digits of pi) */
 static const uint32_t P_INIT[18] = {

@@ -7,6 +7,25 @@
 
 #include "haxial/sha1.h"
 #include <string.h>
+#include <stdlib.h>
+
+/**
+ * Internal structure definition
+ */
+struct TSha1Context {
+    uint32_t state[5];      /**< SHA-1 state values (h0-h4) */
+    uint32_t block_count;   /**< Number of 64-byte blocks processed */
+    uint8_t  buffer[64];    /**< Input buffer */
+    uint32_t buffer_pos;    /**< Current position in buffer */
+};
+
+TSha1Context* hx_sha1_alloc(void) {
+    return malloc(sizeof(TSha1Context));
+}
+
+void hx_sha1_free(TSha1Context *ctx) {
+    free(ctx);
+}
 
 /* SHA-1 initial hash values */
 #define SHA1_H0 0x67452301

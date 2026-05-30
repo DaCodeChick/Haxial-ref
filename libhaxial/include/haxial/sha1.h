@@ -20,24 +20,27 @@ extern "C" {
 #endif
 
 /**
- * SHA-1 context structure
+ * SHA-1 context structure (opaque - use provided functions)
  * 
- * Note: In the original binary, SHA-1 functions use a uint[22] array
- * plus padding rather than a formal struct. This struct documents the
- * layout for our implementation.
- * 
- * Layout (92 bytes):
- *   state[5]:      +0x00 (20 bytes) - SHA-1 state (h0-h4)
- *   block_count:   +0x14 (4 bytes)  - Number of 64-byte blocks processed
- *   buffer[64]:    +0x18 (64 bytes) - Input buffer
- *   buffer_pos:    +0x58 (4 bytes)  - Current position in buffer (0-64)
+ * For stack allocation:
+ *   TSha1Context ctx;
+ *   hx_sha1_init(&ctx);
  */
-typedef struct {
-    uint32_t state[5];      /**< SHA-1 state values (h0-h4) */
-    uint32_t block_count;   /**< Number of 64-byte blocks processed */
-    uint8_t  buffer[64];    /**< Input buffer */
-    uint32_t buffer_pos;    /**< Current position in buffer */
-} TSha1Context;
+typedef struct TSha1Context TSha1Context;
+
+/**
+ * Allocate SHA-1 context on heap
+ * 
+ * @return Pointer to allocated context, or NULL on error
+ */
+TSha1Context* hx_sha1_alloc(void);
+
+/**
+ * Free SHA-1 context allocated with hx_sha1_alloc
+ * 
+ * @param ctx Context to free
+ */
+void hx_sha1_free(TSha1Context *ctx);
 
 /**
  * Initialize SHA-1 context

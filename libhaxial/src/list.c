@@ -103,6 +103,16 @@ void hx_list_remove(TList *list, TListNode *node) {
     list->count--;
 }
 
+TListNode* hx_list_pop_head(TList *list) {
+    if (list == NULL || list->head == NULL) {
+        return NULL;
+    }
+    
+    TListNode *node = list->head;
+    hx_list_remove(list, node);
+    return node;
+}
+
 TListNode* hx_list_first(const TList *list) {
     if (list == NULL) {
         return NULL;
