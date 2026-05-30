@@ -26,6 +26,9 @@ set(LIBHAXIAL_SOURCES
     src/errors.c
     src/crypto/sha1.c
     src/crypto/blowfish.c
+    src/list.c
+    src/pstring.c
+    src/fnv1a.c
 )
 
 # Public headers
@@ -34,6 +37,9 @@ set(LIBHAXIAL_PUBLIC_HEADERS
     include/haxial/errors.h
     include/haxial/sha1.h
     include/haxial/blowfish.h
+    include/haxial/list.h
+    include/haxial/pstring.h
+    include/haxial/fnv1a.h
 )
 
 # Create library

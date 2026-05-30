@@ -22,6 +22,13 @@
 #include "haxial/sha1.h"
 #include "haxial/blowfish.h"
 
+/* Data structures */
+#include "haxial/list.h"
+#include "haxial/pstring.h"
+
+/* Utilities */
+#include "haxial/fnv1a.h"
+
 /* TODO: Add more headers as we implement them */
 /* #include "haxial/socket.h" */
 /* #include "haxial/connection.h" */
