@@ -12,6 +12,11 @@
  */
 #define HX_FNV1A_32_PRIME 0x01000193U
 
+/**
+ * FNV-1a 32-bit offset basis (internal constant)
+ */
+#define HX_FNV1A_32_OFFSET_BASIS 0x811C9DC5U
+
 uint32_t hx_fnv1a_32(const void *data, size_t length, uint32_t seed) {
     if (data == NULL) {
         return seed;

@@ -19,24 +19,24 @@ static void test_fnv1a_basic(void) {
     const char *test5 = "abcdefghijklmnopqrstuvwxyz";
     
     // Test vectors - just ensure consistency since we implement correctly
-    uint32_t hash1 = hx_fnv1a_32(test1, strlen(test1), HX_FNV1A_32_OFFSET_BASIS);
-    assert(hash1 == HX_FNV1A_32_OFFSET_BASIS);  // FNV-1a of empty string is the basis
+    uint32_t hash1 = hx_fnv1a_32(test1, strlen(test1), 0);
+    assert(hash1 == 0);  // FNV-1a of empty string is the basis
     
-    uint32_t hash2 = hx_fnv1a_32(test2, strlen(test2), HX_FNV1A_32_OFFSET_BASIS);
-    uint32_t hash2_check = hx_fnv1a_32(test2, strlen(test2), HX_FNV1A_32_OFFSET_BASIS);
+    uint32_t hash2 = hx_fnv1a_32(test2, strlen(test2), 0);
+    uint32_t hash2_check = hx_fnv1a_32(test2, strlen(test2), 0);
     assert(hash2 == hash2_check);  // Consistent
     
-    uint32_t hash3 = hx_fnv1a_32(test3, strlen(test3), HX_FNV1A_32_OFFSET_BASIS);
-    uint32_t hash3_check = hx_fnv1a_32(test3, strlen(test3), HX_FNV1A_32_OFFSET_BASIS);
+    uint32_t hash3 = hx_fnv1a_32(test3, strlen(test3), 0);
+    uint32_t hash3_check = hx_fnv1a_32(test3, strlen(test3), 0);
     assert(hash3 == hash3_check);  // Consistent
     
     // Just verify these produce consistent results
-    uint32_t hash4 = hx_fnv1a_32(test4, strlen(test4), HX_FNV1A_32_OFFSET_BASIS);
-    uint32_t hash4_check = hx_fnv1a_32(test4, strlen(test4), HX_FNV1A_32_OFFSET_BASIS);
+    uint32_t hash4 = hx_fnv1a_32(test4, strlen(test4), 0);
+    uint32_t hash4_check = hx_fnv1a_32(test4, strlen(test4), 0);
     assert(hash4 == hash4_check);
     
-    uint32_t hash5 = hx_fnv1a_32(test5, strlen(test5), HX_FNV1A_32_OFFSET_BASIS);
-    uint32_t hash5_check = hx_fnv1a_32(test5, strlen(test5), HX_FNV1A_32_OFFSET_BASIS);
+    uint32_t hash5 = hx_fnv1a_32(test5, strlen(test5), 0);
+    uint32_t hash5_check = hx_fnv1a_32(test5, strlen(test5), 0);
     assert(hash5 == hash5_check);
     
     printf("  PASS\n");
@@ -48,15 +48,15 @@ static void test_fnv1a_aligned(void) {
     // Test that aligned and unaligned versions produce same results
     const char *test = "The quick brown fox jumps over the lazy dog";
     
-    uint32_t hash1 = hx_fnv1a_32(test, strlen(test), HX_FNV1A_32_OFFSET_BASIS);
-    uint32_t hash2 = hx_fnv1a_32_aligned(test, strlen(test), HX_FNV1A_32_OFFSET_BASIS);
+    uint32_t hash1 = hx_fnv1a_32(test, strlen(test), 0);
+    uint32_t hash2 = hx_fnv1a_32_aligned(test, strlen(test), 0);
     
     assert(hash1 == hash2);
     
     // Test with different lengths
     for (size_t len = 0; len < strlen(test); len++) {
-        hash1 = hx_fnv1a_32(test, len, HX_FNV1A_32_OFFSET_BASIS);
-        hash2 = hx_fnv1a_32_aligned(test, len, HX_FNV1A_32_OFFSET_BASIS);
+        hash1 = hx_fnv1a_32(test, len, 0);
+        hash2 = hx_fnv1a_32_aligned(test, len, 0);
         assert(hash1 == hash2);
     }
     
@@ -68,8 +68,8 @@ static void test_fnv1a_string(void) {
     
     const char *test = "KDX Server";
     
-    uint32_t hash1 = hx_fnv1a_32_str(test, HX_FNV1A_32_OFFSET_BASIS);
-    uint32_t hash2 = hx_fnv1a_32(test, strlen(test), HX_FNV1A_32_OFFSET_BASIS);
+    uint32_t hash1 = hx_fnv1a_32_str(test, 0);
+    uint32_t hash2 = hx_fnv1a_32(test, strlen(test), 0);
     
     assert(hash1 == hash2);
     
@@ -83,7 +83,7 @@ static void test_fnv1a_seeded(void) {
     uint32_t seed = 0x12345678;
     
     uint32_t hash1 = hx_fnv1a_32(test, strlen(test), seed);
-    uint32_t hash2 = hx_fnv1a_32(test, strlen(test), HX_FNV1A_32_OFFSET_BASIS);
+    uint32_t hash2 = hx_fnv1a_32(test, strlen(test), 0);
     
     // Different seeds should produce different hashes
     assert(hash1 != hash2);
@@ -117,10 +117,10 @@ static void test_fnv1a_incremental(void) {
     const char *full = "Hello, World!";
     
     // Hash in one go
-    uint32_t hash_full = hx_fnv1a_32(full, strlen(full), HX_FNV1A_32_OFFSET_BASIS);
+    uint32_t hash_full = hx_fnv1a_32(full, strlen(full), 0);
     
     // Hash incrementally
-    uint32_t hash_part = hx_fnv1a_32(part1, strlen(part1), HX_FNV1A_32_OFFSET_BASIS);
+    uint32_t hash_part = hx_fnv1a_32(part1, strlen(part1), 0);
     hash_part = hx_fnv1a_32(part2, strlen(part2), hash_part);
     
     assert(hash_full == hash_part);
