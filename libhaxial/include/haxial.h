@@ -28,6 +28,7 @@
 
 /* Utilities */
 #include "haxial/fnv1a.h"
+#include "haxial/random.h"
 
 /* TODO: Add more headers as we implement them */
 /* #include "haxial/socket.h" */

@@ -29,6 +29,7 @@ set(LIBHAXIAL_SOURCES
     src/list.c
     src/pstring.c
     src/fnv1a.c
+    src/random.c
 )
 
 # Public headers
@@ -40,6 +41,7 @@ set(LIBHAXIAL_PUBLIC_HEADERS
     include/haxial/list.h
     include/haxial/pstring.h
     include/haxial/fnv1a.h
+    include/haxial/random.h
 )
 
 # Create library

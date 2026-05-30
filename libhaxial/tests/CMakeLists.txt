@@ -29,3 +29,9 @@ add_test(NAME fnv1a_test COMMAND test_fnv1a)
 add_executable(test_pstring pstring_test.c)
 target_link_libraries(test_pstring PRIVATE haxial)
 add_test(NAME pstring_test COMMAND test_pstring)
+
+# Test random number generation
+add_executable(test_random random_test.c)
+target_link_libraries(test_random PRIVATE haxial)
+add_test(NAME random_test COMMAND test_random)
+
