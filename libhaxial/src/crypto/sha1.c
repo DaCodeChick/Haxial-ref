@@ -66,7 +66,7 @@ void hx_sha1_free(TSha1Context *ctx) {
 /**
  * Transform one 64-byte block
  */
-static void sha1_transform(uint32_t state[5], const uint8_t buffer[64]) {
+static void sha1_transform(uint32_t *state, const uint8_t *buffer) {
     uint32_t a, b, c, d, e;
     uint32_t block[16];
     
