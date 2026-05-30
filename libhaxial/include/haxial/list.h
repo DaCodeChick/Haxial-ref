@@ -32,69 +32,74 @@ extern "C" {
 /**
  * Intrusive list node - embed this in your data structure
  */
-typedef struct HxListNode {
-    struct HxListNode *next;
-    struct HxListNode *prev;
-} HxListNode;
+typedef struct TListNode {
+    struct TListNode *next;
+    struct TListNode *prev;
+} TListNode;
 
 /**
- * List head structure
+ * List head structure (opaque)
+ * 
+ * For stack allocation, use HX_LIST_SIZE with aligned storage:
+ *   alignas(TList) char buf[HX_LIST_SIZE];
+ *   TList *list = (TList *)buf;
  */
-typedef struct HxList {
-    HxListNode *head;
-    HxListNode *tail;
-    size_t count;
-} HxList;
+typedef struct TList TList;
+
+/**
+ * Size of TList structure for stack allocation
+ */
+#define HX_LIST_SIZE (sizeof(void*) * 2 + sizeof(size_t))
 
 /**
  * Initialize a list
  */
-void hx_list_init(HxList *list);
+void hx_list_init(TList *list);
 
 /**
  * Check if list is empty
  */
-bool hx_list_is_empty(const HxList *list);
+bool hx_list_is_empty(const TList *list);
 
 /**
  * Get number of elements in list
  */
-size_t hx_list_count(const HxList *list);
+size_t hx_list_count(const TList *list);
 
 /**
  * Prepend node to front of list
  */
-void hx_list_prepend(HxList *list, HxListNode *node);
+void hx_list_prepend(TList *list, TListNode *node);
 
 /**
  * Append node to end of list
  */
-void hx_list_append(HxList *list, HxListNode *node);
+void hx_list_append(TList *list, TListNode *node);
 
 /**
  * Remove node from list
  */
-void hx_list_remove(HxList *list, HxListNode *node);
+void hx_list_remove(TList *list, TListNode *node);
 
 /**
  * Get first node (or NULL if empty)
  */
-HxListNode* hx_list_first(const HxList *list);
+TListNode* hx_list_first(const TList *list);
 
 /**
  * Get last node (or NULL if empty)
  */
-HxListNode* hx_list_last(const HxList *list);
+TListNode* hx_list_last(const TList *list);
 
 /**
  * Get next node (or NULL if at end)
  */
-HxListNode* hx_list_next(const HxListNode *node);
+TListNode* hx_list_next(const TListNode *node);
 
 /**
  * Get previous node (or NULL if at start)
  */
-HxListNode* hx_list_prev(const HxListNode *node);
+TListNode* hx_list_prev(const TListNode *node);
 
 /**
  * Get container structure from list node
@@ -109,21 +114,21 @@ HxListNode* hx_list_prev(const HxListNode *node);
 /**
  * Iterate over list
  * 
- * @param list Pointer to HxList
- * @param node HxListNode* variable for iteration
+ * @param list Pointer to TList
+ * @param node TListNode* variable for iteration
  */
 #define HX_LIST_FOR_EACH(list, node) \
-    for ((node) = (list)->head; (node) != NULL; (node) = (node)->next)
+    for ((node) = hx_list_first(list); (node) != NULL; (node) = (node)->next)
 
 /**
  * Iterate over list safely (allows removal during iteration)
  * 
- * @param list Pointer to HxList
- * @param node HxListNode* variable for iteration
- * @param tmp HxListNode* variable for temporary storage
+ * @param list Pointer to TList
+ * @param node TListNode* variable for iteration
+ * @param tmp TListNode* variable for temporary storage
  */
 #define HX_LIST_FOR_EACH_SAFE(list, node, tmp) \
-    for ((node) = (list)->head, (tmp) = (node) ? (node)->next : NULL; \
+    for ((node) = hx_list_first(list), (tmp) = (node) ? (node)->next : NULL; \
          (node) != NULL; \
          (node) = (tmp), (tmp) = (node) ? (node)->next : NULL)
 

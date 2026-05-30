@@ -7,7 +7,15 @@
 #include <string.h>
 #include <stdint.h>
 
-uint8_t hx_pstring_from_cstr(HxPString *pstr, const char *cstr) {
+/**
+ * Internal structure definition
+ */
+struct TPascalString {
+    uint8_t length;
+    char data[HX_PSTRING_MAX_LENGTH];
+};
+
+uint8_t hx_pstring_from_cstr(TPascalString *pstr, const char *cstr) {
     if (pstr == NULL) {
         return 0;
     }
@@ -28,7 +36,7 @@ uint8_t hx_pstring_from_cstr(HxPString *pstr, const char *cstr) {
     return pstr->length;
 }
 
-size_t hx_pstring_to_cstr(char *cstr, const HxPString *pstr, size_t max_length) {
+size_t hx_pstring_to_cstr(char *cstr, const TPascalString *pstr, size_t max_length) {
     if (cstr == NULL || max_length == 0) {
         return 0;
     }
@@ -49,7 +57,7 @@ size_t hx_pstring_to_cstr(char *cstr, const HxPString *pstr, size_t max_length) 
     return copy_len;
 }
 
-uint8_t hx_pstring_copy(HxPString *dest, const HxPString *src) {
+uint8_t hx_pstring_copy(TPascalString *dest, const TPascalString *src) {
     if (dest == NULL) {
         return 0;
     }
@@ -65,7 +73,7 @@ uint8_t hx_pstring_copy(HxPString *dest, const HxPString *src) {
     return dest->length;
 }
 
-uint8_t hx_pstring_copy_truncate(HxPString *dest, const HxPString *src, uint8_t max_length) {
+uint8_t hx_pstring_copy_truncate(TPascalString *dest, const TPascalString *src, uint8_t max_length) {
     if (dest == NULL) {
         return 0;
     }
@@ -86,7 +94,7 @@ uint8_t hx_pstring_copy_truncate(HxPString *dest, const HxPString *src, uint8_t 
     return dest->length;
 }
 
-uint8_t hx_pstring_to_buffer(void *buffer, const HxPString *pstr, uint8_t max_length) {
+uint8_t hx_pstring_to_buffer(void *buffer, const TPascalString *pstr, uint8_t max_length) {
     if (buffer == NULL) {
         return 0;
     }
@@ -105,7 +113,7 @@ uint8_t hx_pstring_to_buffer(void *buffer, const HxPString *pstr, uint8_t max_le
     return copy_len;
 }
 
-int hx_pstring_compare(const HxPString *pstr1, const HxPString *pstr2) {
+int hx_pstring_compare(const TPascalString *pstr1, const TPascalString *pstr2) {
     if (pstr1 == NULL && pstr2 == NULL) {
         return 0;
     }
@@ -125,7 +133,19 @@ int hx_pstring_compare(const HxPString *pstr1, const HxPString *pstr2) {
     return memcmp(pstr1->data, pstr2->data, pstr1->length);
 }
 
-int hx_pstring_compare_cstr(const HxPString *pstr, const char *cstr) {
+uint8_t hx_pstring_length(const TPascalString *pstr) {
+    return (pstr != NULL) ? pstr->length : 0;
+}
+
+const char* hx_pstring_data(const TPascalString *pstr) {
+    return (pstr != NULL) ? pstr->data : NULL;
+}
+
+bool hx_pstring_is_empty(const TPascalString *pstr) {
+    return (pstr == NULL) || (pstr->length == 0);
+}
+
+int hx_pstring_compare_cstr(const TPascalString *pstr, const char *cstr) {
     if (pstr == NULL && cstr == NULL) {
         return 0;
     }

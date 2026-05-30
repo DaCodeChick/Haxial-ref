@@ -6,7 +6,16 @@
 #include "haxial/list.h"
 #include <stddef.h>
 
-void hx_list_init(HxList *list) {
+/**
+ * Internal structure definition
+ */
+struct TList {
+    TListNode *head;
+    TListNode *tail;
+    size_t count;
+};
+
+void hx_list_init(TList *list) {
     if (list == NULL) {
         return;
     }
@@ -16,7 +25,7 @@ void hx_list_init(HxList *list) {
     list->count = 0;
 }
 
-bool hx_list_is_empty(const HxList *list) {
+bool hx_list_is_empty(const TList *list) {
     if (list == NULL) {
         return true;
     }
@@ -24,7 +33,7 @@ bool hx_list_is_empty(const HxList *list) {
     return list->head == NULL;
 }
 
-size_t hx_list_count(const HxList *list) {
+size_t hx_list_count(const TList *list) {
     if (list == NULL) {
         return 0;
     }
@@ -32,7 +41,7 @@ size_t hx_list_count(const HxList *list) {
     return list->count;
 }
 
-void hx_list_prepend(HxList *list, HxListNode *node) {
+void hx_list_prepend(TList *list, TListNode *node) {
     if (list == NULL || node == NULL) {
         return;
     }
@@ -51,7 +60,7 @@ void hx_list_prepend(HxList *list, HxListNode *node) {
     list->count++;
 }
 
-void hx_list_append(HxList *list, HxListNode *node) {
+void hx_list_append(TList *list, TListNode *node) {
     if (list == NULL || node == NULL) {
         return;
     }
@@ -70,7 +79,7 @@ void hx_list_append(HxList *list, HxListNode *node) {
     list->count++;
 }
 
-void hx_list_remove(HxList *list, HxListNode *node) {
+void hx_list_remove(TList *list, TListNode *node) {
     if (list == NULL || node == NULL) {
         return;
     }
@@ -94,7 +103,7 @@ void hx_list_remove(HxList *list, HxListNode *node) {
     list->count--;
 }
 
-HxListNode* hx_list_first(const HxList *list) {
+TListNode* hx_list_first(const TList *list) {
     if (list == NULL) {
         return NULL;
     }
@@ -102,7 +111,7 @@ HxListNode* hx_list_first(const HxList *list) {
     return list->head;
 }
 
-HxListNode* hx_list_last(const HxList *list) {
+TListNode* hx_list_last(const TList *list) {
     if (list == NULL) {
         return NULL;
     }
@@ -110,7 +119,7 @@ HxListNode* hx_list_last(const HxList *list) {
     return list->tail;
 }
 
-HxListNode* hx_list_next(const HxListNode *node) {
+TListNode* hx_list_next(const TListNode *node) {
     if (node == NULL) {
         return NULL;
     }
@@ -118,7 +127,7 @@ HxListNode* hx_list_next(const HxListNode *node) {
     return node->next;
 }
 
-HxListNode* hx_list_prev(const HxListNode *node) {
+TListNode* hx_list_prev(const TListNode *node) {
     if (node == NULL) {
         return NULL;
     }

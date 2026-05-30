@@ -27,12 +27,20 @@ extern "C" {
 #define HX_PSTRING_MAX_LENGTH 255
 
 /**
- * Pascal string structure (255 bytes max)
+ * Pascal string structure (opaque)
+ * 
+ * Use hx_pstring_* functions to access. Maximum length is 255 bytes.
+ * 
+ * For stack allocation, use HX_PSTRING_SIZE with aligned storage:
+ *   alignas(TPascalString) char buf[HX_PSTRING_SIZE];
+ *   TPascalString *pstr = (TPascalString *)buf;
  */
-typedef struct HxPString {
-    uint8_t length;
-    char data[HX_PSTRING_MAX_LENGTH];
-} HxPString;
+typedef struct TPascalString TPascalString;
+
+/**
+ * Size of TPascalString structure for stack allocation
+ */
+#define HX_PSTRING_SIZE 256
 
 /**
  * Initialize Pascal string from C string
@@ -41,7 +49,7 @@ typedef struct HxPString {
  * @param cstr Source C string (null-terminated)
  * @return Length of resulting Pascal string (0-255)
  */
-uint8_t hx_pstring_from_cstr(HxPString *pstr, const char *cstr);
+uint8_t hx_pstring_from_cstr(TPascalString *pstr, const char *cstr);
 
 /**
  * Convert Pascal string to C string
@@ -51,7 +59,7 @@ uint8_t hx_pstring_from_cstr(HxPString *pstr, const char *cstr);
  * @param max_length Maximum bytes to write (including null terminator)
  * @return Number of characters written (excluding null terminator)
  */
-size_t hx_pstring_to_cstr(char *cstr, const HxPString *pstr, size_t max_length);
+size_t hx_pstring_to_cstr(char *cstr, const TPascalString *pstr, size_t max_length);
 
 /**
  * Copy Pascal string
@@ -60,7 +68,7 @@ size_t hx_pstring_to_cstr(char *cstr, const HxPString *pstr, size_t max_length);
  * @param src Source Pascal string
  * @return Length of copied string
  */
-uint8_t hx_pstring_copy(HxPString *dest, const HxPString *src);
+uint8_t hx_pstring_copy(TPascalString *dest, const TPascalString *src);
 
 /**
  * Copy Pascal string with truncation
@@ -70,7 +78,7 @@ uint8_t hx_pstring_copy(HxPString *dest, const HxPString *src);
  * @param max_length Maximum length to copy
  * @return Length of copied string (may be truncated)
  */
-uint8_t hx_pstring_copy_truncate(HxPString *dest, const HxPString *src, uint8_t max_length);
+uint8_t hx_pstring_copy_truncate(TPascalString *dest, const TPascalString *src, uint8_t max_length);
 
 /**
  * Copy Pascal string data to buffer (without length byte)
@@ -80,7 +88,7 @@ uint8_t hx_pstring_copy_truncate(HxPString *dest, const HxPString *src, uint8_t 
  * @param max_length Maximum bytes to copy
  * @return Number of bytes copied
  */
-uint8_t hx_pstring_to_buffer(void *buffer, const HxPString *pstr, uint8_t max_length);
+uint8_t hx_pstring_to_buffer(void *buffer, const TPascalString *pstr, uint8_t max_length);
 
 /**
  * Get length of Pascal string
@@ -88,9 +96,7 @@ uint8_t hx_pstring_to_buffer(void *buffer, const HxPString *pstr, uint8_t max_le
  * @param pstr Pascal string
  * @return Length (0-255)
  */
-static inline uint8_t hx_pstring_length(const HxPString *pstr) {
-    return (pstr != NULL) ? pstr->length : 0;
-}
+uint8_t hx_pstring_length(const TPascalString *pstr);
 
 /**
  * Get pointer to data portion of Pascal string
@@ -98,9 +104,7 @@ static inline uint8_t hx_pstring_length(const HxPString *pstr) {
  * @param pstr Pascal string
  * @return Pointer to data (not null-terminated)
  */
-static inline const char* hx_pstring_data(const HxPString *pstr) {
-    return (pstr != NULL) ? pstr->data : NULL;
-}
+const char* hx_pstring_data(const TPascalString *pstr);
 
 /**
  * Check if Pascal string is empty
@@ -108,9 +112,7 @@ static inline const char* hx_pstring_data(const HxPString *pstr) {
  * @param pstr Pascal string
  * @return true if empty or NULL
  */
-static inline bool hx_pstring_is_empty(const HxPString *pstr) {
-    return (pstr == NULL) || (pstr->length == 0);
-}
+bool hx_pstring_is_empty(const TPascalString *pstr);
 
 /**
  * Compare two Pascal strings
@@ -119,7 +121,7 @@ static inline bool hx_pstring_is_empty(const HxPString *pstr) {
  * @param pstr2 Second Pascal string
  * @return 0 if equal, <0 if pstr1 < pstr2, >0 if pstr1 > pstr2
  */
-int hx_pstring_compare(const HxPString *pstr1, const HxPString *pstr2);
+int hx_pstring_compare(const TPascalString *pstr1, const TPascalString *pstr2);
 
 /**
  * Compare Pascal string with C string
@@ -128,7 +130,7 @@ int hx_pstring_compare(const HxPString *pstr1, const HxPString *pstr2);
  * @param cstr C string
  * @return 0 if equal, <0 if pstr < cstr, >0 if pstr > cstr
  */
-int hx_pstring_compare_cstr(const HxPString *pstr, const char *cstr);
+int hx_pstring_compare_cstr(const TPascalString *pstr, const char *cstr);
 
 #ifdef __cplusplus
 }

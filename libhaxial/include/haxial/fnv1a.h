@@ -19,9 +19,8 @@ extern "C" {
 #endif
 
 /**
- * FNV-1a 32-bit constants
+ * FNV-1a 32-bit offset basis (initial hash value)
  */
-#define HX_FNV1A_32_PRIME 0x01000193U
 #define HX_FNV1A_32_OFFSET_BASIS 0x811C9DC5U
 
 /**
