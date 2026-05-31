@@ -24,13 +24,13 @@ static void test_error_strings(void) {
     }
     
     str = hx_error_string(HX_ERROR_SOCKET_CLOSED);
-    if (strcmp(str, "Socket is closed") != 0) {
+    if (strcmp(str, "Socket closed") != 0) {
         printf("Error string for SOCKET_CLOSED: FAIL (got '%s')\n", str);
         pass = 0;
     }
     
     str = hx_error_string(0xDEADBEEF);
-    if (strcmp(str, "Unknown error") != 0) {
+    if (strcmp(str, "Unknown error code") != 0) {
         printf("Error string for unknown: FAIL (got '%s')\n", str);
         pass = 0;
     }
@@ -69,11 +69,23 @@ static void test_error_helpers(void) {
 }
 
 static void test_error_codes(void) {
-    /* Just verify the constants have expected values from Ghidra analysis */
+    /* Verify the constants have expected values from binary analysis */
     int pass = 1;
     
     if (HX_ERROR_SUCCESS != 0x00000000) {
         printf("HX_ERROR_SUCCESS value: FAIL\n");
+        pass = 0;
+    }
+    
+    if (HX_ERROR_INVALID_PARAM != 0x00010002) {
+        printf("HX_ERROR_INVALID_PARAM value: FAIL (expected 0x00010002, got 0x%08x)\n", 
+               HX_ERROR_INVALID_PARAM);
+        pass = 0;
+    }
+    
+    if (HX_ERROR_OUT_OF_MEMORY != 0x00020065) {
+        printf("HX_ERROR_OUT_OF_MEMORY value: FAIL (expected 0x00020065, got 0x%08x)\n",
+               HX_ERROR_OUT_OF_MEMORY);
         pass = 0;
     }
     
@@ -83,9 +95,9 @@ static void test_error_codes(void) {
         pass = 0;
     }
     
-    if (HX_ERROR_AUTH_FAILED != 0x00040070) {
-        printf("HX_ERROR_AUTH_FAILED value: FAIL (expected 0x00040070, got 0x%08x)\n",
-               HX_ERROR_AUTH_FAILED);
+    if (HX_ERROR_INVALID_PACKET_MAGIC != 0x00040071) {
+        printf("HX_ERROR_INVALID_PACKET_MAGIC value: FAIL (expected 0x00040071, got 0x%08x)\n",
+               HX_ERROR_INVALID_PACKET_MAGIC);
         pass = 0;
     }
     

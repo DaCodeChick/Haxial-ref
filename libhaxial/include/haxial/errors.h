@@ -74,6 +74,17 @@ typedef uint32_t TErrorCode;
 #define HX_ERROR_PACKET_TOO_LARGE       0x00040075  /**< Packet too large (>2048 bytes) */
 
 /**
+ * Convert POSIX errno to KDX error code
+ * 
+ * Matches the conversion logic from KDXServer errno_to_kdx_error function.
+ * Multiple errno values may map to the same KDX error for simplification.
+ * 
+ * @param errno_value POSIX errno value
+ * @return Corresponding KDX error code
+ */
+TErrorCode hx_errno_to_error(int errno_value);
+
+/**
  * Error code to string conversion
  * 
  * @param error Error code

@@ -24,6 +24,7 @@ endif()
 # Library sources
 set(LIBHAXIAL_SOURCES
     src/errors.c
+    src/errno_convert.c
     src/crypto/sha1.c
     src/crypto/blowfish.c
     src/list.c

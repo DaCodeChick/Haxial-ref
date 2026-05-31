@@ -35,3 +35,8 @@ add_executable(test_random random_test.c)
 target_link_libraries(test_random PRIVATE haxial)
 add_test(NAME random_test COMMAND test_random)
 
+# Test errno conversion
+add_executable(test_errno_convert errno_convert_test.c)
+target_link_libraries(test_errno_convert PRIVATE haxial)
+add_test(NAME errno_convert_test COMMAND test_errno_convert)
+
